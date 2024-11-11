@@ -1,14 +1,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: capsule
-  namespace: flux-system
+  name: capsule-proxy
+  namespace: capsule-system
 spec:
   serviceAccountName: helm-controller
-  releaseName: capsule
+  releaseName: capsule-proxy
   chart:
     spec:
-      chart: capsule
+      chart: capsule-proxy
       sourceRef:
         kind: HelmRepository
         name: capsule
