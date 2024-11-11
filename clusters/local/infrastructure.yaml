@@ -1,27 +1,9 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: argocd
-  namespace: flux-system
-spec:
-  interval: 720m0s
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  serviceAccountName: kustomize-controller
-  path: ./infrastructure/local/argocd
-  prune: true
-  wait: true
-  timeout: 10m
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: capsule
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: argocd
   interval: 720m0s
   sourceRef:
     kind: GitRepository
@@ -47,3 +29,21 @@ spec:
   serviceAccountName: kustomize-controller
   path: ./infrastructure/local/capsule-proxy
   prune: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: argocd
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: capsule
+  interval: 720m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  serviceAccountName: kustomize-controller
+  path: ./infrastructure/local/argocd
+  prune: true
+  wait: true
+  timeout: 10m
